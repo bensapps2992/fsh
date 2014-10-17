@@ -96,7 +96,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 		}
 		
 		else if (currentLoop == MAINMENU){
-			
+			int i = 0;
 			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 			mProjectionMatrix = getProjMat();
 			mViewMatrix = getViewMat();
