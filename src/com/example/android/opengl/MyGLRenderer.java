@@ -36,14 +36,22 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	private Background bg;
 	
 	private int currentLoop;
-	public int MAINMENU = 0;
-	public int PLAYGAME = 1;
+	public static final int MAINMENU = 0;
+	public static final int PLAYGAME = 1;
+	public static final int OPTIONS = 2;
+	public static final int MOREAPPS = 3;
+	public static final int DESIGNER = 4;
 	
 	private float angle = 0;
 	
 	public void setCurrentLoop(int loop)
 	{
 		currentLoop = loop;
+	}
+	
+	public int getCurrentLoop()
+	{
+		return currentLoop;
 	}
 	
 	public void setAngle(float mAngle)
@@ -85,18 +93,17 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onDrawFrame(GL10 unused) {
-		//z axis comes out of screen +ve
-		if(currentLoop == PLAYGAME){
-		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
-		mProjectionMatrix = getProjMat();
-		mViewMatrix = getViewMat();
-		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-		bg.draw(mMVPMatrix);
-		mFishManager.draw();
-		}
 		
-		else if (currentLoop == MAINMENU){
-			int i = 0;
+		switch(currentLoop){
+		case PLAYGAME:
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
+			mProjectionMatrix = getProjMat();
+			mViewMatrix = getViewMat();
+			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+			bg.draw(mMVPMatrix);
+			mFishManager.draw();
+			break;
+		case MAINMENU:
 			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 			mProjectionMatrix = getProjMat();
 			mViewMatrix = getViewMat();
@@ -105,10 +112,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 			Matrix.translateM(mMVPMatrix, 0, 0, -0.5f, -1f);
 			Matrix.rotateM(mMVPMatrix, 0, angle, 0, 1, 0);
 			mTitle.draw(mMVPMatrix);
-		}
-		else
-		{
-		
+			break;
+		case OPTIONS:
+			break;
+		case MOREAPPS:
+			break;
+		case DESIGNER:
+			break;
+			default:
 		}
 	}
 	
