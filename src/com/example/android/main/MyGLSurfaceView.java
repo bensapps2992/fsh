@@ -1,4 +1,4 @@
-package com.example.android.opengl;
+package com.example.android.main;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -34,15 +34,4 @@ public class MyGLSurfaceView extends GLSurfaceView {
 		super.onResume();
 		mRenderer.onResume();
 	}
-	
-	//put in touch controls
-	@Override
-	public boolean onTouchEvent(MotionEvent e) {
-		if(e.getActionMasked() == MotionEvent.ACTION_MOVE)
-		{
-			mRenderer.setAngle((float)e.getX());
-		}
-		return true;
-	}
-
 }

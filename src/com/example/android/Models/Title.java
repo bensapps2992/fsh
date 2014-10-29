@@ -1,4 +1,4 @@
-package com.example.android.opengl.Models;
+package com.example.android.Models;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -6,20 +6,22 @@ import java.nio.FloatBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import com.example.android.opengl.MainActivity;
-import com.example.android.opengl.MyGLRenderer;
+import com.example.android.Managers.ObjReader;
+import com.example.android.Managers.riGraphicTools;
+import com.example.android.main.MainActivity;
+import com.example.android.main.MyGLRenderer;
 import com.example.android.opengl.R;
-import com.example.android.opengl.Managers.ObjReader;
-import com.example.android.opengl.Managers.riGraphicTools;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
-public class Goldfish {
+public class Title {
 	
 	private float vertices[];
 	private float uvs[];
@@ -28,26 +30,25 @@ public class Goldfish {
 	private FloatBuffer uvBuffer;
 	private FloatBuffer normalBuffer;
 	Context mContext;
-	private float[] mLightPos = new float[4];
 	
-	public Goldfish(Context c){
+	public Title(Context c){
 		mContext = c;
 		setup(c);
 	}
 	
 	private float[] getVertices(){
 		float[] vertices;
-		vertices = ObjReader.readFile(R.raw.goldfish,ObjReader.GOLDFISH,ObjReader.VERTICES, mContext);
+		vertices = ObjReader.readFile(R.raw.title,ObjReader.GOLDFISH,ObjReader.VERTICES, mContext);
 		return vertices;
 	}
 	private float[] getUVS(){
 		float[] uvs;
-		uvs = ObjReader.readFile(R.raw.goldfish,ObjReader.GOLDFISH, ObjReader.UVS, mContext);
+		uvs = ObjReader.readFile(R.raw.title,ObjReader.GOLDFISH, ObjReader.UVS, mContext);
 		return uvs;
 	}
 	private float[] getNormals(){
 		float[] normals;
-		normals = ObjReader.readFile(R.raw.goldfish,ObjReader.GOLDFISH, ObjReader.NORMALS, mContext);
+		normals = ObjReader.readFile(R.raw.title,ObjReader.GOLDFISH, ObjReader.NORMALS, mContext);
 		return normals;
 	}
 	
@@ -85,7 +86,7 @@ public class Goldfish {
 				GLES20.glGenTextures(1, texturenames, 0);
 							
 				// Retrieve our image from resources.
-				int id = mContext.getResources().getIdentifier("drawable/fishuvs", null, mContext.getPackageName());
+				int id = mContext.getResources().getIdentifier("drawable/titleuvs", null, mContext.getPackageName());
 							
 				// Temporary create a bitmap
 				Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), id);
@@ -106,7 +107,7 @@ public class Goldfish {
 				bmp.recycle();
 	}
 	
-	public void draw(float[] m, float angle){//m is model matrix
+	public void draw(float[] m){//m is model matrix
 		float[] mViewMatrix = MyGLRenderer.getViewMat();//the view matrix
 		float[] mProjectionMatrix = MyGLRenderer.getProjMat();//the projection matrix
 		float[] mMVMatrix = new float[16];
@@ -115,47 +116,31 @@ public class Goldfish {
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mMVMatrix, 0);
 		GLES20.glEnable(GLES20.GL_DEPTH_TEST);
         GLES20.glDepthFunc(GL10.GL_LEQUAL);
-        int cp = riGraphicTools.sp_Image_Light;
+        GLES20.glDepthMask( true );
+        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        int cp = riGraphicTools.sp_Image;
 		GLES20.glUseProgram(cp);
 		// get handle to vertex shader's vPosition member
-        int mPositionHandle = GLES20.glGetAttribLocation(cp, "a_Position");
-        int mNormalHandle = GLES20.glGetAttribLocation(cp, "a_Normal");
+        int mPositionHandle = GLES20.glGetAttribLocation(cp, "vPosition");
         int mTexCoordLoc = GLES20.glGetAttribLocation(cp, "a_texCoord" );
         // Enable a handle to the triangle vertices
         GLES20.glEnableVertexAttribArray(mPositionHandle);
-        GLES20.glEnableVertexAttribArray(mNormalHandle);
         GLES20.glEnableVertexAttribArray ( mTexCoordLoc );
         // Prepare the triangle coordinate data
         GLES20.glVertexAttribPointer(
                 mPositionHandle, 3,
                 GLES20.GL_FLOAT, false,
                 12, vertexBuffer);
-        GLES20.glVertexAttribPointer(mNormalHandle, 3,
-                GLES20.GL_FLOAT, false,
-                0, normalBuffer);
         GLES20.glVertexAttribPointer ( mTexCoordLoc, 2, GLES20.GL_FLOAT,
                 false, 
                 0, uvBuffer);
 
         // get handle to shape's transformation matrix
-        int uMVHandle = GLES20.glGetUniformLocation(cp, "uMVMatrix");
         int mMVPMatrixHandle = GLES20.glGetUniformLocation(cp, "uMVPMatrix");
-        int mtMatrixHandle = GLES20.glGetUniformLocation(cp, "tMatrix");
-        int mAngleHandle = GLES20.glGetUniformLocation(cp, "mAngle");
-        int uLightPosHandle = GLES20.glGetUniformLocation(cp, "u_LightPos");
         int mSamplerLoc = GLES20.glGetUniformLocation (cp, "s_texture" );
 
         // Apply the projection and view transformation
-        GLES20.glUniformMatrix4fv(uMVHandle, 1, false, mMVMatrix, 0);  
         GLES20.glUniformMatrix4fv(mMVPMatrixHandle, 1, false, mMVPMatrix, 0);
-        float[] test = new float[16];
-        Matrix.setIdentityM(test, 0);
-        Matrix.rotateM(test, 0, 90, 0, 1, 0);
-        GLES20.glUniformMatrix4fv(mtMatrixHandle, 1, false, test,0);
-        GLES20.glUniform1f(mAngleHandle, (float)(Math.toRadians(angle)));
-        mViewMatrix = MyGLRenderer.getViewMat();
-        Matrix.multiplyMV(mLightPos,0, mViewMatrix, 0, new float[]{0,1,1,1}, 0);
-        GLES20.glUniform3f(uLightPosHandle, mLightPos[0], mLightPos[1], mLightPos[2]);
         GLES20.glUniform1i ( mSamplerLoc, 2);
 
         // Draw the triangle
@@ -163,10 +148,10 @@ public class Goldfish {
         
         // Disable vertex array
         GLES20.glDisableVertexAttribArray(mPositionHandle);
-        GLES20.glDisableVertexAttribArray(mNormalHandle);
         GLES20.glDisableVertexAttribArray(mTexCoordLoc);
         
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+        GLES20.glDisable(GLES20.GL_CULL_FACE);
 	}
 
 }

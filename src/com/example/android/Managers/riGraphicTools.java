@@ -1,4 +1,4 @@
-package com.example.android.opengl.Managers;
+package com.example.android.Managers;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

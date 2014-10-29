@@ -1,16 +1,14 @@
-package com.example.android.opengl;
+package com.example.android.main;
 
-
-import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.example.android.opengl.Managers.Background;
-import com.example.android.opengl.Managers.FishManager;
-import com.example.android.opengl.Managers.TextManager;
-import com.example.android.opengl.Managers.riGraphicTools;
-import com.example.android.opengl.Models.Title;
+import com.example.android.Managers.Background;
+import com.example.android.Managers.FishManager;
+import com.example.android.Managers.riGraphicTools;
+import com.example.android.Models.Title;
+import com.example.android.mainmenu.MenuRenderer;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -30,10 +28,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	// Misc
 	Context mContext;
 	
-	private TextManager mTextManager;
 	private FishManager mFishManager;
-	private Title mTitle;
-	private Background bg;
 	
 	private int currentLoop;
 	public static final int MAINMENU = 0;
@@ -53,12 +48,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	{
 		return currentLoop;
 	}
-	
-	public void setAngle(float mAngle)
-	{
-		angle = mAngle;
-	}
-	
 	
 	
 	public static float getRatio()
@@ -96,28 +85,41 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 		
 		switch(currentLoop){
 		case PLAYGAME:
+			GLES20.glClearColor(1.0f, 0.0f, 0.0f, 1);
+
 			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
 			mProjectionMatrix = getProjMat();
 			mViewMatrix = getViewMat();
 			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-			bg.draw(mMVPMatrix);
-			mFishManager.draw();
+			//bg.draw(mMVPMatrix);
+			//mFishManager.draw();
 			break;
 		case MAINMENU:
-			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+			MenuRenderer.draw();
+			break;
+		case OPTIONS:
+			GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1);
+
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
 			mProjectionMatrix = getProjMat();
 			mViewMatrix = getViewMat();
 			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
-			bg.draw(mMVPMatrix);
-			Matrix.translateM(mMVPMatrix, 0, 0, -0.5f, -1f);
-			Matrix.rotateM(mMVPMatrix, 0, angle, 0, 1, 0);
-			mTitle.draw(mMVPMatrix);
-			break;
-		case OPTIONS:
 			break;
 		case MOREAPPS:
+			GLES20.glClearColor(0.0f, 1.0f, 0.0f, 1);
+
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
+			mProjectionMatrix = getProjMat();
+			mViewMatrix = getViewMat();
+			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 			break;
 		case DESIGNER:
+			GLES20.glClearColor(1.0f, 0.0f, 1.0f, 1);
+
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
+			mProjectionMatrix = getProjMat();
+			mViewMatrix = getViewMat();
+			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 			break;
 			default:
 		}
@@ -135,29 +137,14 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 				Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);	
 				GLES20.glEnable(GL10.GL_BLEND);
 			    GLES20.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
-			    bg = new Background(mContext);//background on layer 1
-			    mFishManager = new FishManager(mContext); //text on layer 0, fish on layer 2
-			    mTitle = new Title(mContext);//title on layer 2
+			    //initiate the menu renderer
+			    MenuRenderer.init(mContext);
 	}
 
 	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 	    
 	}	
-	
-	public static int loadShader(int type, String shaderCode){
-
-        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
-        int shader = GLES20.glCreateShader(type);
-
-        // add the source code to the shader and compile it
-        GLES20.glShaderSource(shader, shaderCode);
-        GLES20.glCompileShader(shader);
-
-        return shader;
-    }
-	
 	
 	 /**
 	    * Utility method for debugging OpenGL calls. Provide the name of the call

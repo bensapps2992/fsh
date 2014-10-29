@@ -1,8 +1,6 @@
-package com.example.android.opengl.Managers;
+package com.example.android.Managers;
 
-import com.example.android.opengl.MyGLRenderer;
-
-import android.opengl.Matrix;
+import com.example.android.main.MyGLRenderer;
 
 public class FishData {
 	private TextManager mTextManager;

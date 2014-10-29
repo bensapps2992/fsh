@@ -1,9 +1,10 @@
-package com.example.android.opengl.Managers;
+package com.example.android.Managers;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import com.example.android.opengl.MyGLRenderer;
+
+import com.example.android.main.MyGLRenderer;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

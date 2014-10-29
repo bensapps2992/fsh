@@ -1,9 +1,9 @@
-package com.example.android.opengl.Managers;
+package com.example.android.Managers;
 
 import java.util.Random;
 
-import com.example.android.opengl.MyGLRenderer;
-import com.example.android.opengl.Models.Goldfish;
+import com.example.android.Models.Goldfish;
+import com.example.android.main.MyGLRenderer;
 
 import android.content.Context;
 import android.opengl.Matrix;
