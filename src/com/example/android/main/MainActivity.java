@@ -1,6 +1,6 @@
 package com.example.android.main;
 
-import com.example.android.mainmenu.MenuTouch;
+import com.example.android.screens.mainmenu.MenuTouch;
 
 import android.os.Bundle;
 import android.os.Handler;

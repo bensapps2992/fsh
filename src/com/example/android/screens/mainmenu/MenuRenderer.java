@@ -1,4 +1,4 @@
-package com.example.android.mainmenu;
+package com.example.android.screens.mainmenu;
 
 import com.example.android.Managers.Background;
 import com.example.android.Managers.FishManager;

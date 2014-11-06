@@ -8,7 +8,11 @@ import com.example.android.Managers.Background;
 import com.example.android.Managers.FishManager;
 import com.example.android.Managers.riGraphicTools;
 import com.example.android.Models.Title;
-import com.example.android.mainmenu.MenuRenderer;
+import com.example.android.screens.designer.DesignerRenderer;
+import com.example.android.screens.mainmenu.MenuRenderer;
+import com.example.android.screens.moreapps.MoreAppsRenderer;
+import com.example.android.screens.options.OptionsRenderer;
+import com.example.android.screens.playgame.PlayGameRenderer;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -18,10 +22,7 @@ import android.util.Log;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer {
 
-	// Our matrices
-	private  float[] mProjectionMatrix = new float[16];
-	private  float[] mViewMatrix = new float[16];
-	private  float[] mMVPMatrix = new float[16];
+	// Screen Dimensions
 	private static float ratio;	
 	private static float mWidth;
 	private static float mHeight;
@@ -30,14 +31,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	
 	private FishManager mFishManager;
 	
+	//Game loop stuff
 	private int currentLoop;
 	public static final int MAINMENU = 0;
 	public static final int PLAYGAME = 1;
 	public static final int OPTIONS = 2;
 	public static final int MOREAPPS = 3;
 	public static final int DESIGNER = 4;
-	
-	private float angle = 0;
 	
 	public void setCurrentLoop(int loop)
 	{
@@ -82,15 +82,9 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	
 	@Override
 	public void onDrawFrame(GL10 unused) {
-		
 		switch(currentLoop){
 		case PLAYGAME:
-			GLES20.glClearColor(1.0f, 0.0f, 0.0f, 1);
-
-			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
-			mProjectionMatrix = getProjMat();
-			mViewMatrix = getViewMat();
-			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+			PlayGameRenderer.draw();
 			//bg.draw(mMVPMatrix);
 			//mFishManager.draw();
 			break;
@@ -98,28 +92,13 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 			MenuRenderer.draw();
 			break;
 		case OPTIONS:
-			GLES20.glClearColor(0.0f, 0.0f, 1.0f, 1);
-
-			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
-			mProjectionMatrix = getProjMat();
-			mViewMatrix = getViewMat();
-			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+			OptionsRenderer.draw();
 			break;
 		case MOREAPPS:
-			GLES20.glClearColor(0.0f, 1.0f, 0.0f, 1);
-
-			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
-			mProjectionMatrix = getProjMat();
-			mViewMatrix = getViewMat();
-			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+			MoreAppsRenderer.draw();
 			break;
 		case DESIGNER:
-			GLES20.glClearColor(1.0f, 0.0f, 1.0f, 1);
-
-			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT| GLES20.GL_DEPTH_BUFFER_BIT);
-			mProjectionMatrix = getProjMat();
-			mViewMatrix = getViewMat();
-			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+			DesignerRenderer.draw();
 			break;
 			default:
 		}
@@ -134,7 +113,6 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 				MyGLRenderer.mWidth=width;
 		        MyGLRenderer.mHeight=height;
 		        MyGLRenderer.ratio = (float) width / height;
-				Matrix.frustumM(mProjectionMatrix, 0, -ratio, ratio, -1, 1, 3, 7);	
 				GLES20.glEnable(GL10.GL_BLEND);
 			    GLES20.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 			    //initiate the menu renderer
