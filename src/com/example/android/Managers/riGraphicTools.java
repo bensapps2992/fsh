@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import com.example.android.opengl.R;
+
 import android.content.Context;
 import android.opengl.GLES20;
 import android.util.Log;
@@ -17,6 +18,7 @@ public class riGraphicTools {
 	public static int sp_ImageText;
 	public static int sp_Image;
 	public static int sp_Image_Light;
+	public static int sp_SolidColorButtons;
 	private static Context mContext;
 	
 
@@ -82,6 +84,10 @@ public class riGraphicTools {
 		String vs_Image_Light=readFromFile(R.raw.vs_image_light);
 		String fs_Image_Light=readFromFile(R.raw.fs_image_light);
 		
+		String vs_SolidColorButtons=readFromFile(R.raw.vs_solidcolor);
+		String fs_SolidColorButtons=readFromFile(R.raw.fs_solidcolorbuttons);
+		
+		
 	    int vertexShader = riGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER,vs_Image_Text);
 	    int fragmentShader = riGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER,fs_Image_Text);
 
@@ -106,7 +112,14 @@ public class riGraphicTools {
 	    GLES20.glAttachShader(riGraphicTools.sp_Image_Light, fragmentShader); // add the fragment shader to program
 	    GLES20.glLinkProgram(riGraphicTools.sp_Image_Light);                  // creates OpenGL ES program executables
 
-	    
+	    vertexShader = riGraphicTools.loadShader(GLES20.GL_VERTEX_SHADER, vs_SolidColorButtons);
+	    fragmentShader = riGraphicTools.loadShader(GLES20.GL_FRAGMENT_SHADER, fs_SolidColorButtons);
+
+	    riGraphicTools.sp_SolidColorButtons = GLES20.glCreateProgram();             // create empty OpenGL ES Program
+	    GLES20.glAttachShader(riGraphicTools.sp_SolidColorButtons, vertexShader);   // add the vertex shader to program
+	    GLES20.glAttachShader(riGraphicTools.sp_SolidColorButtons, fragmentShader); // add the fragment shader to program
+	    GLES20.glLinkProgram(riGraphicTools.sp_SolidColorButtons);                  // creates OpenGL ES program executables
+
 	    // Set our shader programm
 		GLES20.glUseProgram(riGraphicTools.sp_Image);
 	}

@@ -3,6 +3,7 @@ package com.example.android.screens.mainmenu;
 import com.example.android.Managers.Background;
 import com.example.android.Managers.FishManager;
 import com.example.android.Models.Title;
+import com.example.android.main.MainActivity;
 import com.example.android.main.MyGLRenderer;
 
 import android.content.Context;
@@ -49,8 +50,24 @@ public class MenuRenderer {
 		return vangle;
 	}
 	
-	public static void draw()
+	public static void draw(Context context)
 	{
+		if(MainActivity.getmGLView().loadingCounter==-1)
+		{
+			GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
+			mProjectionMatrix = MyGLRenderer.getProjMat();
+			mViewMatrix = MyGLRenderer.getViewMat();
+			Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
+			mContext = context;
+			angle = 0;
+			vangle = 0;
+		    bg = new Background(mContext);//background on layer 1
+		    mTitle = new Title(mContext);//title on layer 2
+			//load all the resources and get ready to do the draw loop
+		    MainActivity.getmGLView().loadingCounter = 0;
+		}
+		else if(MainActivity.getmGLView().loadingCounter==0)
+		{
 		GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 		mProjectionMatrix = MyGLRenderer.getProjMat();
 		mViewMatrix = MyGLRenderer.getViewMat();
@@ -66,14 +83,5 @@ public class MenuRenderer {
 		Matrix.scaleM(mMVPMatrix, 0, 0.8f, 0.8f, 0.8f);
 		mTitle.draw(mMVPMatrix);
 	}
-	
-	public static void init(Context context)
-	{
-		mContext = context;
-		angle = 0;
-		vangle = 0;
-	    bg = new Background(mContext);//background on layer 1
-	    mTitle = new Title(mContext);//title on layer 2
 	}
-
 }

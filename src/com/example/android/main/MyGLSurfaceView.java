@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 public class MyGLSurfaceView extends GLSurfaceView {
 
 	public MyGLRenderer mRenderer;
+	public int loadingCounter;
 	
 	public MyGLSurfaceView(Context context) {
         super(context);

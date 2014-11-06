@@ -7,8 +7,10 @@ import javax.microedition.khronos.opengles.GL10;
 import com.example.android.Managers.Background;
 import com.example.android.Managers.FishManager;
 import com.example.android.Managers.riGraphicTools;
+import com.example.android.Models.Rect;
 import com.example.android.Models.Title;
 import com.example.android.screens.designer.DesignerRenderer;
+import com.example.android.screens.loading.LoadingRenderer;
 import com.example.android.screens.mainmenu.MenuRenderer;
 import com.example.android.screens.moreapps.MoreAppsRenderer;
 import com.example.android.screens.options.OptionsRenderer;
@@ -24,8 +26,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 
 	// Screen Dimensions
 	private static float ratio;	
-	private static float mWidth;
-	private static float mHeight;
+	public static float mWidth;
+	public static float mHeight;
 	// Misc
 	Context mContext;
 	
@@ -41,6 +43,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	
 	public void setCurrentLoop(int loop)
 	{
+		MainActivity.getmGLView().loadingCounter = -1;//set the counter to -1 ... we need to load the resources
 		currentLoop = loop;
 	}
 	
@@ -84,12 +87,12 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 	public void onDrawFrame(GL10 unused) {
 		switch(currentLoop){
 		case PLAYGAME:
-			PlayGameRenderer.draw();
+			PlayGameRenderer.draw(mContext);
 			//bg.draw(mMVPMatrix);
 			//mFishManager.draw();
 			break;
 		case MAINMENU:
-			MenuRenderer.draw();
+			MenuRenderer.draw(mContext);
 			break;
 		case OPTIONS:
 			OptionsRenderer.draw();
@@ -116,7 +119,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer {
 				GLES20.glEnable(GL10.GL_BLEND);
 			    GLES20.glBlendFunc(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 			    //initiate the menu renderer
-			    MenuRenderer.init(mContext);
+			    LoadingRenderer.loader = new Rect();
 	}
 
 	@Override

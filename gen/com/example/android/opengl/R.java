@@ -27,11 +27,13 @@ public final class R {
         public static final int fs_image=0x7f040000;
         public static final int fs_image_light=0x7f040001;
         public static final int fs_image_text=0x7f040002;
-        public static final int goldfish=0x7f040003;
-        public static final int title=0x7f040004;
-        public static final int vs_image=0x7f040005;
-        public static final int vs_image_light=0x7f040006;
-        public static final int vs_image_text=0x7f040007;
+        public static final int fs_solidcolorbuttons=0x7f040003;
+        public static final int goldfish=0x7f040004;
+        public static final int title=0x7f040005;
+        public static final int vs_image=0x7f040006;
+        public static final int vs_image_light=0x7f040007;
+        public static final int vs_image_text=0x7f040008;
+        public static final int vs_solidcolor=0x7f040009;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
