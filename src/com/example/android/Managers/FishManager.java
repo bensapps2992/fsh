@@ -12,7 +12,7 @@ public class FishManager {
 	private Goldfish masterGoldfish;
 	private TextManager mTextManager;
 	private FishData mFishData;
-	private final int NO_GOLDFISH = 1;
+	private final int NO_GOLDFISH = 5;
 	private fish mGoldfish[] = new fish[NO_GOLDFISH];
 	Context mContext;
 	

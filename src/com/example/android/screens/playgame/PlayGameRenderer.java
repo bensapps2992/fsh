@@ -1,6 +1,7 @@
 package com.example.android.screens.playgame;
 
 import com.example.android.Managers.Background;
+import com.example.android.Managers.FishManager;
 import com.example.android.main.MainActivity;
 import com.example.android.main.MyGLRenderer;
 
@@ -18,6 +19,7 @@ public class PlayGameRenderer {
 	
 	//Objects
 	static Background bg;
+	static FishManager fish;
 
 	public static void draw(Context con)
 	{
@@ -25,6 +27,7 @@ public class PlayGameRenderer {
 		{
 			mContext = con;
 			bg = new Background(mContext);
+			fish = new FishManager(mContext);
 			MainActivity.getmGLView().loadingCounter = 0;
 		}
 		else if(MainActivity.getmGLView().loadingCounter==0)
@@ -35,6 +38,7 @@ public class PlayGameRenderer {
 		mViewMatrix = MyGLRenderer.getViewMat();
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 		bg.draw(mMVPMatrix);
+		fish.draw();
 		}
 	}
 }

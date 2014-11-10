@@ -21,6 +21,7 @@ public class MenuRenderer {
 	private  static float[] mMVPMatrix = new float[16];
 	
 	private static Background bg;
+	//private static FishManager fish;
 	private static Title mTitle;
 	
 	public static final int OPTIONS = 1;
@@ -63,6 +64,7 @@ public class MenuRenderer {
 			vangle = 0;
 		    bg = new Background(mContext);//background on layer 1
 		    mTitle = new Title(mContext);//title on layer 2
+		   // fish = new FishManager(mContext);
 			//load all the resources and get ready to do the draw loop
 		    MainActivity.getmGLView().loadingCounter = 0;
 		}
@@ -73,6 +75,7 @@ public class MenuRenderer {
 		mViewMatrix = MyGLRenderer.getViewMat();
 		Matrix.multiplyMM(mMVPMatrix, 0, mProjectionMatrix, 0, mViewMatrix, 0);
 		bg.draw(mMVPMatrix);
+		//fish.draw();
 		if(vangle>0.1 || vangle < -0.1){
 			angle = angle + vangle;
 			vangle = vangle/VDECAY;

@@ -14,5 +14,5 @@ void main() {
 	float ambient = 0.1;
 	color *= diffuse + ambient;
 	color.xyz = clamp(color.xyz,0.,1.);
-	gl_FragColor = vec4(color);
+	gl_FragColor = vec4(color.xyz,1.0);
 }
